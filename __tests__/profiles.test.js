@@ -90,7 +90,7 @@ describe('profiles routes', () => {
 
   it('requires authorzation to get', () => {
     return request(app)
-      .get('/api/v1/profiles/all')
+      .get('/api/v1/profiles/')
       .then(res => {
         expect(res.statusCode).toEqual(500);
       });
@@ -112,7 +112,7 @@ describe('profiles routes', () => {
       })
       .then(() => {
         return agent
-          .get('/api/v1/profiles/all')
+          .get('/api/v1/profiles/')
           .then(res => {
             expect(res.body).toEqual([{
               _id: expect.any(String),
@@ -133,7 +133,7 @@ describe('profiles routes', () => {
       });
   });
 
-  it('finds a profile by userId', () => {
+  it('finds a profile by id', async() => {
     return agent
       .post('/api/v1/profiles')
       .send({
@@ -150,6 +150,81 @@ describe('profiles routes', () => {
       .then(() => {
         return agent
           .get('/api/v1/profiles/user')
+          .then(res => {
+            expect(res.body).toEqual({
+              _id: expect.any(String),
+              name: 'Test',
+              location: 'Salem, OR',
+              dog: {
+                _id: expect.any(String),
+                name: 'Sparky',
+                age: 8,
+                weight: '20 lbs',
+                breed: 'spaniel'
+              },
+              image: 'https://thehappypuppysite.com/wp-content/uploads/2019/04/Cocker-Spaniel-Lifespan-long.jpg',
+              userId: expect.any(String),
+              __v: 0
+            });
+          });
+      });
+  });
+
+  it('updates a user\'s profile', () => {
+    return agent
+      .post('/api/v1/profiles')
+      .send({
+        name: 'Test',
+        location: 'Salem, OR',
+        dog: {
+          name: 'Sparky',
+          age: 8,
+          weight: '20 lbs',
+          breed: 'spaniel'
+        },
+        image: 'https://thehappypuppysite.com/wp-content/uploads/2019/04/Cocker-Spaniel-Lifespan-long.jpg'
+      })
+      .then(() => {
+        return agent
+          .patch('/api/v1/profiles/user')
+          .send({ location: 'Boise, ID' })
+          .then(res => {
+            expect(res.body).toEqual({
+              _id: expect.any(String),
+              name: 'Test',
+              location: 'Boise, ID',
+              dog: {
+                _id: expect.any(String),
+                name: 'Sparky',
+                age: 8,
+                weight: '20 lbs',
+                breed: 'spaniel'
+              },
+              image: 'https://thehappypuppysite.com/wp-content/uploads/2019/04/Cocker-Spaniel-Lifespan-long.jpg',
+              userId: expect.any(String),
+              __v: 0
+            });
+          });
+      });
+  });
+
+  it('deletes a user\'s profile', () => {
+    return agent
+      .post('/api/v1/profiles')
+      .send({
+        name: 'Test',
+        location: 'Salem, OR',
+        dog: {
+          name: 'Sparky',
+          age: 8,
+          weight: '20 lbs',
+          breed: 'spaniel'
+        },
+        image: 'https://thehappypuppysite.com/wp-content/uploads/2019/04/Cocker-Spaniel-Lifespan-long.jpg'
+      })
+      .then(() => {
+        return agent
+          .delete('/api/v1/profiles/user')
           .then(res => {
             expect(res.body).toEqual({
               _id: expect.any(String),
