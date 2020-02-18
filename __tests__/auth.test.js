@@ -22,7 +22,7 @@ describe('auth routes', () => {
   let user;
   beforeEach(async() => {
     user = await User.create({
-      username: 'test',
+      name: 'test',
       email: 'test@test.com',
       password: 'hype'
     });
@@ -32,14 +32,14 @@ describe('auth routes', () => {
     return request(app)
       .post('/api/v1/auth/signup')
       .send({
-        username: 'megaman',
+        name: 'megaman',
         email: 'mega@man.com',
         password: 'rush'
       })
       .then(res => {
         expect(res.body).toEqual({
           _id: expect.any(String),
-          username: 'megaman',
+          name: 'megaman',
           email: 'mega@man.com',
           __v: 0
         });
@@ -50,14 +50,14 @@ describe('auth routes', () => {
     return request(app)
       .post('/api/v1/auth/login')
       .send({
-        username: 'test',
+        name: 'test',
         email: 'test@test.com',
         password: 'hype'
       })
       .then(res => {
         expect(res.body).toEqual({
           _id: user.id,
-          username: 'test',
+          name: 'test',
           email: 'test@test.com',
           __v: 0
         });
@@ -68,7 +68,7 @@ describe('auth routes', () => {
     return request(app)
       .post('/api/v1/auth/login')
       .send({
-        username: 'Megaman',
+        name: 'Megaman',
         email: 'test@test.com',
         password: 'hype'
       })
@@ -84,7 +84,7 @@ describe('auth routes', () => {
     return request(app)
       .post('/api/v1/auth/login')
       .send({
-        username: 'test',
+        name: 'test',
         email: 'mega@man.com',
         password: 'hype'
       })
@@ -100,7 +100,7 @@ describe('auth routes', () => {
     return request(app)
       .post('/api/v1/auth/login')
       .send({
-        username: 'test',
+        name: 'test',
         email: 'test@test.com',
         password: 'hypeee'
       })
@@ -118,7 +118,7 @@ describe('auth routes', () => {
     await agent
       .post('/api/v1/auth/login')
       .send({
-        username: 'test',
+        name: 'test',
         email: 'test@test.com',
         password: 'hype'
       });
@@ -128,7 +128,7 @@ describe('auth routes', () => {
       .then(res => {
         expect(res.body).toEqual({
           _id: user.id,
-          username: 'test',
+          name: 'test',
           email: 'test@test.com',
           __v: user.__v
         });
