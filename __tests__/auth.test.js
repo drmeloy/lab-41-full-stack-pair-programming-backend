@@ -115,23 +115,24 @@ describe('auth routes', () => {
   it('retrieves a logged in user with verify', async() => {
     const agent = request.agent(app);
 
-    await agent
+    return await agent
       .post('/api/v1/auth/login')
       .send({
         name: 'test',
         email: 'test@test.com',
         password: 'hype'
-      });
-
-    return agent
-      .get('/api/v1/auth/verify')
-      .then(res => {
-        expect(res.body).toEqual({
-          _id: user.id,
-          name: 'test',
-          email: 'test@test.com',
-          __v: user.__v
-        });
+      })
+      .then(() => {
+        return agent
+          .get('/api/v1/auth/verify')
+          .then(res => {
+            expect(res.body).toEqual({
+              _id: user.id,
+              name: 'test',
+              email: 'test@test.com',
+              __v: user.__v
+            });
+          });
       });
   });
 });
